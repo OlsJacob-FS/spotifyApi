@@ -1,4 +1,5 @@
 const querystring = require("querystring");
+
 require("dotenv").config();
 
 const client_id = process.env.CLIENT_ID;
@@ -20,7 +21,7 @@ exports.login = (req, res) => {
 //Callback route
 //AFTER AUTH REDIRECT TO HTTP://localhost:3000
 //Access code / access_token / state
-exports.callback = (req, res) => {
+exports.callback = async (req, res) => {
   let code = req.query.code || null;
   console.log("this is code", code);
   // fetch spotify token to get access token
@@ -47,6 +48,8 @@ exports.callback = (req, res) => {
         response.json().then((data) => {
           let access_token = data.access_token;
           let refresh_token = data.refresh_token;
+          console.log("This is access_Token", JSON.stringify(access_token));
+
           //if token is valid redirect to localhost 3000
           res.redirect(
             "http://localhost:3000/" +
@@ -55,7 +58,6 @@ exports.callback = (req, res) => {
                 refresh_token: refresh_token,
               })
           );
-          console.log("This is access_Token", access_token);
         });
       } else {
         //if token is invalid :: error
@@ -68,4 +70,16 @@ exports.callback = (req, res) => {
       }
     }
   );
+  const getProfile = () => {
+    const response = fetch("https://api.spotify.com/v1/me", {
+      headers: {
+        Authorization: "Bearer " + access_Token,
+      },
+    });
+    const data = response.json();
+    console.log(data);
+    return data;
+  };
 };
+
+exports.profile = (req, res) => {};
