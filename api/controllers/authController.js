@@ -20,7 +20,7 @@ exports.login = (req, res) => {
 };
 //Callback route
 //AFTER AUTH REDIRECT TO HTTP://localhost:3000
-//Access code / access_token / state
+//Access code / access_token
 exports.callback = async (req, res) => {
   let code = req.query.code || null;
   console.log("this is code", code);
@@ -70,16 +70,6 @@ exports.callback = async (req, res) => {
       }
     }
   );
-  const getProfile = () => {
-    const response = fetch("https://api.spotify.com/v1/me", {
-      headers: {
-        Authorization: "Bearer " + access_Token,
-      },
-    });
-    const data = response.json();
-    console.log(data);
-    return data;
-  };
 };
 
 exports.profile = (req, res) => {};
