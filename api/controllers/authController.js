@@ -1,10 +1,13 @@
 const querystring = require("querystring");
+const axios = require("axios");
+const jwt = require("jsonwebtoken");
 
 require("dotenv").config();
 
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
 const redirect_uri = process.env.REDIRECT_URI;
+const secret_key = process.env.SECRET_KEY;
 
 exports.login = (req, res) => {
   res.redirect(
@@ -16,60 +19,40 @@ exports.login = (req, res) => {
         redirect_uri: redirect_uri,
       })
   );
-  console.log(redirect_uri);
 };
 //Callback route
 //AFTER AUTH REDIRECT TO HTTP://localhost:3000
 //Access code / access_token
 exports.callback = async (req, res) => {
   let code = req.query.code || null;
-  console.log("this is code", code);
   // fetch spotify token to get access token
   const authOptions = {
+    url: "https://accounts.spotify.com/api/token",
     method: "POST",
     form: {
       code: code,
       redirect_uri: redirect_uri,
+      grant_type: "authorization_code",
     },
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
-
       Authorization:
         "Basic " +
         Buffer.from(client_id + ":" + client_secret).toString("base64"),
     },
-    body: `code=${code}&redirect_uri=${redirect_uri}&grant_type=authorization_code`,
     json: true,
   };
-  //fetch api token
-  fetch("https://accounts.spotify.com/api/token", authOptions).then(
-    (response) => {
-      if (response.status === 200) {
-        response.json().then((data) => {
-          let access_token = data.access_token;
-          let refresh_token = data.refresh_token;
-          console.log("This is access_Token", JSON.stringify(access_token));
 
-          //if token is valid redirect to localhost 3000
-          res.redirect(
-            "http://localhost:3000/" +
-              querystring.stringify({
-                access_token: access_token,
-                refresh_token: refresh_token,
-              })
-          );
-        });
-      } else {
-        //if token is invalid :: error
-        res.redirect(
-          "/#" +
-            querystring.stringify({
-              error: "invalid_token",
-            })
-        );
-      }
-    }
+  const { data } = await axios.post(authOptions.url, authOptions.form, {
+    headers: authOptions.headers,
+  });
+
+  const payload = { foo: "bar" };
+
+  res.redirect(
+    "http://localhost:3000/?" +
+      querystring.stringify({
+        access_token: data.access_token,
+      })
   );
 };
-
-exports.profile = (req, res) => {};

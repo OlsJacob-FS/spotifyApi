@@ -1,7 +1,14 @@
 const mongoose = require("mongoose");
 
-const jwtSchema = new mongoose.Schema({
+const tokenSchema = new mongoose.Schema({
   //jwt token schema
+  token: {
+    type: String,
+  },
+  created_At: {
+    type: Date,
+    default: Date.now(),
+  },
 });
 
-module.exports = mongoose.model("JWT", jwtSchema);
+module.exports = mongoose.model("Token", tokenSchema);
