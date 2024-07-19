@@ -1,8 +1,9 @@
 const querystring = require("querystring");
 const axios = require("axios");
-const jwt = require("jsonwebtoken");
+const jwt = require("jwt-simple");
 
 require("dotenv").config();
+const WebToken = require("../models/WebToken");
 
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
@@ -47,12 +48,46 @@ exports.callback = async (req, res) => {
     headers: authOptions.headers,
   });
 
-  const payload = { foo: "bar" };
+  const payload = { access_token: data.access_token };
+  const token = jwt.encode(payload, secret_key);
 
+  const webToken = new WebToken({
+    token,
+  });
+  webToken.save();
   res.redirect(
     "http://localhost:3000/?" +
       querystring.stringify({
         access_token: data.access_token,
       })
   );
+};
+
+exports.refresh = (req, res) => {
+  const refresh_token = req.query.refresh_token;
+  const authOptions = {
+    url: "https://accounts.spotify.com/api/token",
+    headers: {
+      "content-type": "application/x-www-form-urlencoded",
+      Authorization:
+        "Basic " +
+        new Buffer.from(client_id + ":" + client_secret).toString("base64"),
+    },
+    form: {
+      grant_type: "refresh_token",
+      refresh_token: refresh_token,
+    },
+    json: true,
+  };
+
+  request.post(authOptions, function (error, response, body) {
+    if (!error && response.statusCode === 200) {
+      var access_token = body.access_token,
+        refresh_token = body.refresh_token;
+      res.send({
+        access_token: access_token,
+        refresh_token: refresh_token,
+      });
+    }
+  });
 };

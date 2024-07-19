@@ -9,6 +9,11 @@ const tokenSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  expireAt: {
+    type: Date,
+    default: Date.now,
+    expires: 3600,
+  },
 });
 
 module.exports = mongoose.model("Token", tokenSchema);

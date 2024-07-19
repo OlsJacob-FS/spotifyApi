@@ -4,6 +4,7 @@ const authController = require("../controllers/authController");
 
 router.get("/login", authController.login);
 router.get("/callback", authController.callback);
+router.get("/refresh", authController.refresh);
 router.post("/search");
 
 module.exports = router;
