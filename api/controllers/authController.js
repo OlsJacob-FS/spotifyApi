@@ -27,6 +27,7 @@ exports.login = (req, res) => {
 exports.callback = async (req, res) => {
   let code = req.query.code || null;
   // fetch spotify token to get access token
+
   const authOptions = {
     url: "https://accounts.spotify.com/api/token",
     method: "POST",
@@ -47,14 +48,19 @@ exports.callback = async (req, res) => {
   const { data } = await axios.post(authOptions.url, authOptions.form, {
     headers: authOptions.headers,
   });
-
+  //console.log("Access Token: ", data.access_token);
   const payload = { access_token: data.access_token };
   const token = jwt.encode(payload, secret_key);
 
-  const webToken = new WebToken({
-    token,
-  });
-  webToken.save();
+  //console.log("This is token>>", token);
+  const webToken = await WebToken.findOneAndUpdate(
+    { token },
+    { $set: { token } },
+    { upsert: true, new: true }
+  );
+
+  await webToken.save();
+  console.log(webToken);
 
   res.redirect(
     "http://localhost:3000/?" +
@@ -91,38 +97,4 @@ exports.refresh = (req, res) => {
       });
     }
   });
-};
-
-exports.fetchProfile = async (req, res) => {
-  let code = req.query.code || null;
-  // fetch spotify token to get access token
-  const authOptions = {
-    url: "https://accounts.spotify.com/api/token",
-    method: "POST",
-    form: {
-      code: code,
-      redirect_uri: redirect_uri,
-      grant_type: "authorization_code",
-    },
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      Authorization:
-        "Basic " +
-        Buffer.from(client_id + ":" + client_secret).toString("base64"),
-    },
-    json: true,
-  };
-
-  const { data } = await axios.post(authOptions.url, authOptions.form, {
-    headers: authOptions.headers,
-  });
-  const token = { access_token: data.access_token };
-
-  const result = await fetch("https://api.spotify.com/v1/me", {
-    method: "GET",
-    headers: { Authorization: `Bearer ${token}` },
-  });
-
-  console.log(result.json());
-  return await result.json();
 };
