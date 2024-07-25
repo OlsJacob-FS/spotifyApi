@@ -10,3 +10,6 @@ router.get("/profile", spotifyController.fetchProfile);
 router.post("/search");
 
 module.exports = router;
+
+//middlewear
+//passport spotify

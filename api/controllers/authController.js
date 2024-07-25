@@ -53,15 +53,22 @@ exports.callback = async (req, res) => {
   const token = jwt.encode(payload, secret_key);
 
   //console.log("This is token>>", token);
-  const webToken = await WebToken.findOneAndUpdate(
-    { token },
-    { $set: { token } },
-    { upsert: true, new: true }
-  );
 
-  await webToken.save();
-  console.log(webToken);
+  // const webToken = await WebToken.findOneAndUpdate(
+  //   { token },
+  //   { $set: { token } },
+  //   { upsert: true, new: true }
+  // );
+  const webToken = await WebToken.find({});
 
+  if (webToken) {
+    await WebToken.deleteMany({ data: { $exists: false } });
+    //create token here
+    const newToken = await new WebToken({
+      token: token,
+    });
+    await newToken.save();
+  }
   res.redirect(
     "http://localhost:3000/?" +
       querystring.stringify({
