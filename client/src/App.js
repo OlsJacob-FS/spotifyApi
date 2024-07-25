@@ -1,20 +1,20 @@
-import { useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Login from "./pages/Login";
+import Navbar from "./components/navbar/Navbar";
 import "./App.css";
 
 function App() {
-  //axios.get("http://localhost:3000/profile/").then((res) => res.json);
-  // const getAccessToken = (req, res) => {
-  //   //const { access_token } = URLSearchParams;
-  //   fetch("http://localhost:3001/spotify/v1/profile").then((res) => res.json);
-  //   //console.log(access_token);
-  // };
-  // useEffect(() => {
-  //   getAccessToken();
-  // }, []);
-
   return (
     <div className="App">
-      <h1>Success! You are logged in</h1>
+      <div>Logged in</div>
+      <div>
+        <a href="http://localhost:3001/spotify/v1/profile">Profile</a>
+      </div>
+      <div>
+        <Routes>
+          <Route path="/login" exact element={<Login />} />
+        </Routes>
+      </div>
     </div>
   );
 }
