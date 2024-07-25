@@ -6,7 +6,8 @@ const client_secret = process.env.CLIENT_SECRET;
 const redirect_uri = process.env.REDIRECT_URI;
 
 exports.fetchProfile = async (req, res) => {
-  let code = req.query.code || null;
+  let code =
+    "AQAjSv2p3F6yk9P3syYxSR_knsTG-E0-BckFEdqGpePBer9pFARMPfMdKXjzIQRCpuwSAqo762jlQWx3I6fttmYYzasT7KyzREueFHq1RtBhnv1zksQYwZP-1P8OSxw4s7iCZzn5rY2uXSS334e14vmGTwgRMJKz-22-3WqkViF6tPUkP-w_NKMFFJVxVOhoDnXhsluoJSCw6oxIn78nT6-Xx6ikDhGb_JifTifsYvBQ";
   // fetch spotify token to get access token
   const authOptions = {
     url: "https://accounts.spotify.com/api/token",
@@ -33,7 +34,9 @@ exports.fetchProfile = async (req, res) => {
   console.log(token);
   const result = await fetch(`${BASE_URL}/me`, {
     method: "GET",
-    headers: { Authorization: `Bearer ${token}` },
+    headers: {
+      Authorization: `Bearer BQDL-HT75M9Yk09QBe5X3iEpO4g3vHldtKyspnItnaI1VENrM1n9Wy5noUb1D2DP2W7OnyndhEq9-N3d-Ae35fYMBg-w2vVCUkrolExIKeIlR5-__aveja0ivZoM3FMueQyY82QIssGCBmrViUx02tSR8nH-SZnSynlXUebVj-bodQvEPLcZRL6PXsIgIb3pwOn4PT8`,
+    },
   });
 
   console.log(result.json());

@@ -1,3 +1,4 @@
+const express = require("express");
 const querystring = require("querystring");
 const axios = require("axios");
 const jwt = require("jwt-simple");
@@ -25,9 +26,9 @@ exports.login = (req, res) => {
 //AFTER AUTH REDIRECT TO HTTP://localhost:3000
 //Access code / access_token
 exports.callback = async (req, res) => {
-  let code = req.query.code || null;
   // fetch spotify token to get access token
-
+  let code = req.query.code || null;
+  console.log("code::", code);
   const authOptions = {
     url: "https://accounts.spotify.com/api/token",
     method: "POST",
@@ -52,13 +53,6 @@ exports.callback = async (req, res) => {
   const payload = { access_token: data.access_token };
   const token = jwt.encode(payload, secret_key);
 
-  //console.log("This is token>>", token);
-
-  // const webToken = await WebToken.findOneAndUpdate(
-  //   { token },
-  //   { $set: { token } },
-  //   { upsert: true, new: true }
-  // );
   const webToken = await WebToken.find({});
 
   if (webToken) {

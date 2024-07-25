@@ -1,7 +1,10 @@
 const express = require("express");
+const app = express();
 const router = express.Router();
+//const tokenController = require("../controllers/tokenController");
 const authController = require("../controllers/authController");
 const spotifyController = require("../controllers/spotifyController");
+//app.use(tokenController.getAccessToken());
 
 router.get("/login", authController.login);
 router.get("/callback", authController.callback);
