@@ -64,7 +64,7 @@ exports.callback = async (req, res) => {
     await newToken.save();
   }
   res.redirect(
-    "http://localhost:3000/?" +
+    "http://localhost:3000/dashboard?" +
       querystring.stringify({
         access_token: data.access_token,
       })

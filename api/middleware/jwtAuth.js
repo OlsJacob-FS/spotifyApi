@@ -1,14 +1,19 @@
 const jwt = require("jsonwebtoken");
+const WebToken = require("../models/WebToken");
 require("dotenv").config();
 
 const secret_key = process.env.SECRET_KEY;
 
-const jwtAuth = (req, res, next) => {
+const jwtAuth = async (req, res, next) => {
   const token = req.header("Authorization");
   if (!token) return res.status(401).json({ error: "Access denied" });
+
   try {
     const decoded = jwt.verify(token, secret_key);
-    req.access_token = decoded.access_token;
+    const webToken = await WebToken.findOne({ access_token: token });
+    if (!webToken) {
+      return res.status(401).json({ error: "Access denied" });
+    }
     next();
   } catch (error) {
     res.status(401).json({ error: "Invalid token" });

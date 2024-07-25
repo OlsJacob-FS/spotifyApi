@@ -8,7 +8,7 @@ const auth = require("../middleware/jwtAuth");
 router.get("/login", authController.login);
 router.get("/callback", authController.callback);
 router.get("/refresh", authController.refresh);
-router.get("/profile", auth, spotifyController.fetchProfile);
+router.get("/profile", spotifyController.fetchProfile);
 router.post("/search");
 
 module.exports = router;

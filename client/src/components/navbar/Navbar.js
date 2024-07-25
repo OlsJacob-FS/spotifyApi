@@ -5,7 +5,7 @@ export default function Navbar() {
     <div>
       <div className="nav">
         <nav>
-          <h1>Web Village</h1>
+          <h1>Spotify</h1>
         </nav>
       </div>
     </div>
