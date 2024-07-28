@@ -1,4 +1,3 @@
-const express = require("express");
 const querystring = require("querystring");
 const axios = require("axios");
 const jwt = require("jwt-simple");
@@ -11,7 +10,7 @@ const client_secret = process.env.CLIENT_SECRET;
 const redirect_uri = process.env.REDIRECT_URI;
 const secret_key = process.env.SECRET_KEY;
 
-exports.login = (req, res) => {
+exports.login = (req, res, next) => {
   res.redirect(
     "https://accounts.spotify.com/authorize?" +
       querystring.stringify({
@@ -49,8 +48,10 @@ exports.callback = async (req, res) => {
   const { data } = await axios.post(authOptions.url, authOptions.form, {
     headers: authOptions.headers,
   });
-  //console.log("Access Token: ", data.access_token);
+  console.log("This is data>>", data);
+  //console.log("Access Token: ", data);
   const payload = { access_token: data.access_token };
+  //console.log("this is payload", payload);
   const token = jwt.encode(payload, secret_key);
 
   const webToken = await WebToken.find({});

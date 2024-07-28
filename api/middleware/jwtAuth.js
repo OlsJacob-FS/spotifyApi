@@ -9,8 +9,8 @@ const jwtAuth = async (req, res, next) => {
   if (!token) return res.status(401).json({ error: "Access denied" });
 
   try {
-    const decoded = jwt.verify(token, secret_key);
-    const webToken = await WebToken.findOne({ access_token: token });
+    const decoded = jwt.decode(token, secret_key);
+    const webToken = await WebToken.find({});
     if (!webToken) {
       return res.status(401).json({ error: "Access denied" });
     }
