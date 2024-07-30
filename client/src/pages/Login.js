@@ -1,10 +1,12 @@
 import React from "react";
+import "./Pages.css";
 
 export default function Login() {
   return (
     <div>
-      Login
-      <a href="http://localhost:3001/spotify/v1/login"> Click me</a>
+      <>
+        <a href="http://localhost:3001/spotify/v1/login"> Login</a>
+      </>
     </div>
   );
 }

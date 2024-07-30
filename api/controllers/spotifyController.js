@@ -9,13 +9,30 @@ const client_secret = process.env.CLIENT_SECRET;
 const redirect_uri = process.env.REDIRECT_URI;
 const secret_key = process.env.SECRET_KEY;
 
-exports.fetchProfile = async (accessToken, req, res) => {
-  const response = await fetch(`https://api.spotify.com/v1/tracks`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-    method,
-    body: JSON.stringify(body),
-  });
-  return await response.json();
+const fetchAlbums = async (access_token) => {
+  try {
+    const response = await fetch(
+      "https://api.spotify.com/v1/search?q=Eminem&type=album",
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+    } else {
+      throw new Error("Failed to fetch data from Spotify API");
+    }
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return [];
+  }
+};
+
+module.exports = {
+  fetchAlbums,
 };

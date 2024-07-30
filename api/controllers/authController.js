@@ -27,7 +27,7 @@ exports.login = (req, res, next) => {
 exports.callback = async (req, res) => {
   // fetch spotify token to get access token
   let code = req.query.code || null;
-  console.log("code::", code);
+  //console.log("code::", code);
   const authOptions = {
     url: "https://accounts.spotify.com/api/token",
     method: "POST",
@@ -48,7 +48,7 @@ exports.callback = async (req, res) => {
   const { data } = await axios.post(authOptions.url, authOptions.form, {
     headers: authOptions.headers,
   });
-  console.log("This is data>>", data);
+  //console.log("This is data>>", data);
   //console.log("Access Token: ", data);
   const payload = { access_token: data.access_token };
   //console.log("this is payload", payload);
