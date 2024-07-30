@@ -12,7 +12,7 @@ app.use(jwtAuth);
 router.get("/login", authController.login);
 router.get("/callback", authController.callback);
 router.get("/refresh", authController.refresh);
-router.get("/profile", jwtAuth, spotifyController.fetchAlbums);
+router.get("/profile", jwtAuth, spotifyController.fetchProfile);
 router.post("/search");
 
 async function jwtAuth(req, res, next) {
@@ -25,11 +25,13 @@ async function jwtAuth(req, res, next) {
   const decoded = jwt.decode(access, secret_key);
   //console.log("this is decode", decoded);
   const access_token = decoded.access_token;
-  console.log(access_token);
+  console.log("This is access Token::", access_token);
   // if (!webToken) {
   //   return res.status(401).json({ error: "Access denied" });
   // }
-  res.send(access_token);
-  next(access_token);
+
+  next();
+  return access_token;
 }
+
 module.exports = router;

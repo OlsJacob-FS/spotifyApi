@@ -2,17 +2,13 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function DashBoard() {
-  //const [profile, setProfile] = useState(null);
+  const [profile, setProfile] = useState(null);
   // async function getProfile(req, res) {
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const paramValue = urlParams.get("code");
 
-  const response = axios.get(
-    "http://localhost:3001/spotify/v1/profile",
-    +paramValue
-  );
-  console.log(response);
+  const response = axios
+    .get("http://localhost:3001/spotify/v1/profile")
+    .then((res) => setProfile(res.data));
+  console.log(profile);
   // const queryString = window.location.search;
   // const urlParams = new URLSearchParams(queryString);
   // const paramValue = urlParams.get("access_token");
