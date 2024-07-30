@@ -7,31 +7,25 @@ const authController = require("../controllers/authController");
 const spotifyController = require("../controllers/spotifyController");
 
 const secret_key = process.env.SECRET_KEY;
-app.use(jwtAuth);
+// app.use(fetchAccessToken);
 
 router.get("/login", authController.login);
 router.get("/callback", authController.callback);
 router.get("/refresh", authController.refresh);
-router.get("/profile", jwtAuth, spotifyController.fetchProfile);
+router.get("/profile", fetchAccessToken, spotifyController.fetchProfile);
 router.post("/search");
 
-async function jwtAuth(req, res, next) {
+async function fetchAccessToken(req, res, next) {
   const token = await WebToken.find({});
   const access = token[0].token;
-  //const access_token = access && access.split(" ");
 
-  //console.log("Token::::", token[0].token);
-  // if (!token) return res.status(401).json({ error: "Access denied" });
+  //if (!token) return res.status(401).json({ error: "Access denied" });
   const decoded = jwt.decode(access, secret_key);
-  //console.log("this is decode", decoded);
-  const access_token = decoded.access_token;
-  console.log("This is access Token::", access_token);
-  // if (!webToken) {
-  //   return res.status(401).json({ error: "Access denied" });
-  // }
 
+  const access_token = await decoded.access_token;
+  console.log("This is access Token::", access_token);
+  req.access_token = access_token;
   next();
-  return access_token;
 }
 
 module.exports = router;
