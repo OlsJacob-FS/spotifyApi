@@ -2,6 +2,8 @@ nav {
   background-color: #26641a;
   color: white;
   display: flex;
+  gap: 10px;
+  justify-content: space-between;
   top: 0;
   padding: 15px 15px;
   text-align: center;
@@ -16,6 +18,12 @@ nav {
   font-size: 1.5rem;
   margin: 15px;
 }
-img {
-  margin-right: 22px;
+.NavContainer {
+  display: flex;
+  top: 0;
+  gap: 10px;
+}
+
+.cardComp {
+  margin: 15px 20px;
 }

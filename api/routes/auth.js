@@ -18,13 +18,7 @@ router.post("/search");
 async function fetchAccessToken(req, res, next) {
   // Check for token in the database
   const token = await WebToken.find({});
-  //Check if there is a jwt token in the data base if there is not access denied
-  if (!token) {
-    return res.status(401).json({ error: "Access denied" });
-  }
-  if (token === "expired") {
-    res.redirect("http://localhost:3000/login");
-  }
+
   // if token is in database send access token to spotify api call
   if (token) {
     //grab token from database
@@ -34,9 +28,14 @@ async function fetchAccessToken(req, res, next) {
     //store acces token in access_token variable and send it to spotify api endpoint
     const access_token = await decoded.access_token;
     req.access_token = access_token;
+    next();
   }
-
-  next();
+  //Check if there is a jwt token in the data base if there is not access denied
+  if (!token) {
+    return res.status(401).json({ error: "Access denied" });
+  }
+  if (token === "expired") {
+  }
 }
 
 module.exports = router;
