@@ -22,3 +22,11 @@ div {
   flex-wrap: wrap;
   justify-content: center;
 }
+
+.inputField {
+  height: 40px;
+  width: 500px;
+  margin-top: 25px;
+  border-radius: 20px;
+  padding: 5px;
+}

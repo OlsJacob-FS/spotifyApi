@@ -4,14 +4,13 @@ const jwt = require("jwt-simple");
 const WebToken = require("../models/WebToken");
 const authController = require("../controllers/authController");
 const spotifyController = require("../controllers/spotifyController");
-
 const secret_key = process.env.SECRET_KEY;
 // app.use(fetchAccessToken);
 
 router.get("/login", authController.login);
 router.get("/callback", authController.callback);
 router.get("/refresh", authController.refresh);
-router.get("/albums", fetchAccessToken, spotifyController.fetchAlbums);
+router.get("/albums", fetchAccessToken, spotifyController.searchAlbums);
 router.get("/profile", fetchAccessToken, spotifyController.fetchProfile);
 router.post("/search");
 
@@ -19,8 +18,11 @@ async function fetchAccessToken(req, res, next) {
   // Check for token in the database
   const token = await WebToken.find({});
 
+  if (token.length === 0) {
+    res.redirect("http://localhost:3000/login");
+  }
   // if token is in database send access token to spotify api call
-  if (token) {
+  else if (token.length === 1) {
     //grab token from database
     const access = token[0].token;
     //decode jwt to get access token
@@ -31,11 +33,6 @@ async function fetchAccessToken(req, res, next) {
     next();
   }
   //Check if there is a jwt token in the data base if there is not access denied
-  if (!token) {
-    return res.status(401).json({ error: "Access denied" });
-  }
-  if (token === "expired") {
-  }
 }
 
 module.exports = router;

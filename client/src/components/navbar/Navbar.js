@@ -1,7 +1,7 @@
 import React from "react";
 import spotifyImg from "../../images/Spotify_Logo.png";
-import Styles from "./nav.css";
-import SearchBarComp from "../searchBar/SearchBarComp";
+import "./nav.css";
+
 export default function Navbar(props) {
   return (
     <div>

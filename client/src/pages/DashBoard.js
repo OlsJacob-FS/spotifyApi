@@ -2,52 +2,76 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Card from "../components/card/CoverCard";
 import Navbar from "../components/navbar/Navbar";
-import Styles from "./Pages.css";
+import "./Pages.css";
 
 export default function DashBoard() {
+  const [search, setSearch] = useState("");
   const [data, setData] = useState([]);
   const [profile, setProfile] = useState([]);
 
   async function getProfile() {
-    const response = await axios.get(
-      "http://localhost:3001/spotify/v1/profile"
-    );
-    const data = await response.data;
-    await setProfile([data]);
+    try {
+      const response = await axios.get(
+        "http://localhost:3001/spotify/v1/profile"
+      );
+      const profileData = await response.data;
+      await setProfile([profileData]);
+    } catch (error) {
+      console.log("profile error", error);
+    }
   }
+
   useEffect(() => {
     getProfile();
   }, []);
 
-  async function getAlbums() {
-    const response = await axios.get("http://localhost:3001/spotify/v1/albums");
-    const data = await response.data;
+  async function getAlbum() {
+    try {
+      const response = await axios.get(
+        "http://localhost:3001/spotify/v1/albums",
+        {
+          params: {
+            q: search,
+          },
+        }
+      );
 
-    await setData([data.albums.items]);
+      const artistData = await response.data?.artists.items;
+
+      await setData(artistData);
+      console.log("this is data", data);
+    } catch (error) {
+      console.log("This is error", error);
+    }
   }
-  //console.log(data[0]);
-  const albumData = data[0];
-  console.log("This is album data", albumData);
+
+  useEffect(() => {
+    if (search) {
+      getAlbum();
+    }
+  }, [search]);
+
   return (
     <div>
       <Navbar
         name={profile[0]?.display_name}
         image={profile[0]?.images[0].url}
       />
+      <form>
+        <input
+          type="text"
+          placeholder="Search Artist"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="inputField"
+        />
+      </form>
 
       <div className="cardDiv">
-        {albumData?.map((d, i) => (
-          <Card
-            key={i}
-            img={albumData[i].images[0].url}
-            title={albumData[i].name}
-            artist={albumData[i].artists[0].name}
-          />
+        {data?.map((data) => (
+          <Card key={data?.id} img={data?.images[0]?.url} title={data?.name} />
         ))}
       </div>
-      <button onClick={getAlbums} className="btn">
-        Get Albums
-      </button>
     </div>
   );
 }
