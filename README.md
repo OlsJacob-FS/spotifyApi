@@ -2,20 +2,19 @@
 
 ### Overview
 
-- Welcome to my Spotify API App
-  My spotify app allows users to discover new music and audiobooks avalible on the Spotify platform. User's will be able to log in, and save artist, albums, and audiobooks they find interesting. If the user has a Spotify account they will be able to play the music or audibook directly from the link attached to the artist or audiobook on the application.
+- Welcome to my Spotify API App. This full-stack spotify app allows users to discover artist avalible on the Spotify platform. As the user you will be able to click the image for the artist and be redirected to Spotify to view and listen to albums and songs from that artist.
 
   ### Prerequisites
 
   To use this application's repository:
 
-      nodemon >= v3.1.4,
-      cors >= v2.8.5,
-      dotenv >= v16.4.5,
-      express >= v4.19.2,
-      mongoose >= v8.4.5
-      npm >= v10.2.4
-      node >= v18.19.1
+        nodemon >= v3.1.4,
+        cors >= v2.8.5,
+        dotenv >= v16.4.5,
+        express >= v4.19.2,
+        mongoose >= v8.4.5
+        npm >= v10.2.4
+        node >= v18.19.1
 
 ### Getting Started
 

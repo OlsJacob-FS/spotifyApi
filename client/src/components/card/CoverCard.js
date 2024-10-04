@@ -9,12 +9,9 @@ export default function CoverCard(props) {
   return (
     <Card sx={{ minWidth: 300, maxWidth: 300 }} className="cardComp">
       <CardActionArea>
-        <CardMedia
-          component="img"
-          height="200"
-          image={props.img}
-          alt="album cover image"
-        />
+        <a href={props.url}>
+          <CardMedia component="img" height="200" image={props.img} />
+        </a>
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
             {props.title}
